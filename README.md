@@ -19,16 +19,19 @@ gem 'make-rails'
 
 ### Create your assets
 
-Create your `.css` and `.js` assets with a `@make:` comment. `make-rails` will pick this up and run it as a transformation for your file. Use `%s` as a placeholder for the current filename.
+Create your `.css` and `.js` assets with a `make` directive. `make-rails` will pick this up and run it as a transformation for your file. Use `%s` as a placeholder for the current filename.
 
 The command it executes should print its output to STDOUT.
 
 ##### app/assets/stylesheets/app.css
 
 ```css
-/* @make: sassc -I ../../../node_modules %s | postcss -u autoprefixer */
+/*
+ *= make sassc -I ../../../node_modules %s | postcss -u autoprefixer
+ */
 
 @import 'normalize/normalize.css';
+@import './foo';
 
 div {
   color: blue;
@@ -42,7 +45,7 @@ div {
 An example `app/assets/javascripts/application.js` with [Babel][] support:
 
 ```js
-// @make: browserify %s -t babelify
+//= make browserify %s -t babelify
 
 import $ from 'jquery'
 
@@ -56,7 +59,7 @@ $(function () {
 An example `app/assets/stylesheets/application.css` with [Stylus][] and [postcss][] support:
 
 ```js
-// @make: stylus --compress %s --include-css | postcss -u rucksack
+//= make stylus --compress %s --include-css | postcss -u rucksack
 ```
 
 [Babel]: https://babeljs.io/
@@ -65,29 +68,17 @@ An example `app/assets/stylesheets/application.css` with [Stylus][] and [postcss
 
 ## Development
 
-For commands to be ran on development, use `@dev`. Use this to inject some extra tools. In this example, we'll use [browserify-inc][] to produce faster incremental builds, and [browserify-hmr][] for fast module reloading.
+For commands to be ran on development, use `make_dev`. Use this to inject some extra tools. In this example, we'll use [browserify-inc][] to produce faster incremental builds, and [browserify-hmr][] for fast module reloading.
 
 ```js
-// @make: browserify %s -t babelify
-// @dev: browserify-inc %s -t babelify -t browserify-hmr
+//= make browserify %s -t babelify
+//= make_dev browserify-inc %s -t babelify -t browserify-hmr
 
 ...
 ```
 
 [browserify-inc]: https://github.com/jsdf/browserify-incremental
 [browserify-hmr]: https://github.com/AgentME/browserify-hmr
-
-## Multiline
-
-End the `@make:` directive with a newline. It will pick up the rest of the comment block as the command.
-
-```js
-/*
- * @make:
- * browserify %s -t babelify | \
- *   uglifyjs -cm
- */
-```
 
 ## Todo
 
