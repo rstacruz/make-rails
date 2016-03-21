@@ -26,7 +26,7 @@ The command it executes should print its output to STDOUT.
 ##### app/assets/stylesheets/app.css
 
 ```css
-// @make: sassc -I ../../../node_modules %s | postcss -u autoprefixer
+/* @make: sassc -I ../../../node_modules %s | postcss -u autoprefixer */
 
 @import 'normalize/normalize.css';
 
